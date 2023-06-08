@@ -2,4 +2,4 @@ __pycache__/
 venv/
 downloaded_photo/
 tok.py
-resul_json.txt
+result.json

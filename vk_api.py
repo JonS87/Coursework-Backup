@@ -1,4 +1,3 @@
-import time
 import requests
 
 class VkApiHandler:
@@ -9,63 +8,13 @@ class VkApiHandler:
             'v': version
         }
     
-    def get_user_data(self, user_ids):
-        url = self.base_url + 'users.get'
-        params ={'user_ids': user_ids,
-                 **self.params
-                }
-        data = requests.get(url,params=params).json()
-        return data
-
-    def get_user_data_extended(self, user_ids, fields):
-        url = self.base_url + 'users.get'
-        params ={'user_ids': user_ids,
-                'fields': fields,
-                **self.params
-                }
-        data = requests.get(url,params=params).json()
-        return data
-    
-    def search_groups(self, q, sort, count):
-        url = self.base_url + 'groups.search'
-        params = {
-            'q': q,
-            'sort': sort,
-            'count': count,
-            **self.params
-        }
-        data = requests.get(url, params=params).json()
-        return data['response']
-    
-    def search_news(self, q):
-        url = self.base_url + 'newsfeed.search'
-        params = {
-            'q': q,
-            'count': 5,
-            **self.params
-        }
-        #news_frame = pd.DataFrame()
-        news = []
-        while True:
-            time.sleep(0.34)
-            data = requests.get(url, params=params).json()
-            #news_frame = pd.concat([news_frame, pd.DataFrame(data['response']['items'])])
-            news.extend(data['response']['items'])
-            if 'next_from' in data['response']:
-                params.update({'start_from':data['response']['next_from']})
-            else:
-                pass
-            print(len(news))
-            break
-        #return news_frame
-        return news
-    
-    def search_photos(self, owner_id, album_id='profile'):
+    def search_photos(self, owner_id, photo_count, album_id='profile'):
         url = self.base_url + 'photos.get'
         params = {
             'owner_id': owner_id,
             'album_id': album_id, #'profile, wall, saved',
             'extended': 1,
+            'count': photo_count,
             **self.params
         }
         data = requests.get(url, params=params).json()
